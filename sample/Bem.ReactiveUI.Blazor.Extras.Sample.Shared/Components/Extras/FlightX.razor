@@ -1,0 +1,14 @@
+@inherits ComponentBaseX<Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels.FlightViewModel>
+<Container Class="flash">
+@RenderCountFragment
+<Row>
+    <Column ColumnSize="ColumnSize.IsHalf">
+        <TextEdit Plaintext ReadOnly>Airline</TextEdit>
+        <TextEdit Plaintext ReadOnly>@(ViewModel?.Airline)</TextEdit>
+    </Column>
+    <Column ColumnSize="ColumnSize.IsHalf">
+        <TextEdit Plaintext ReadOnly>Plane Type</TextEdit>
+        <TextEdit Plaintext ReadOnly>@(ViewModel?.PlaneType)</TextEdit>
+    </Column>
+</Row>
+</Container>

@@ -1,0 +1,30 @@
+@inherits ComponentBase<System.Collections.ObjectModel.ObservableCollection<Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels.DepartureViewModel>>
+<Container Class="flash">
+@RenderCountFragment
+<Row>
+    <Column ColumnSize="ColumnSize.Is2">Departure</Column>
+    <Column ColumnSize="ColumnSize.Is2">Delay</Column>
+    <Column ColumnSize="ColumnSize.Is2">Boarding</Column>
+    <Column ColumnSize="ColumnSize.Is2">PassengerCount</Column>
+    <Column ColumnSize="ColumnSize.Is4">Flight</Column>
+</Row>
+<Repeater Items="@ViewModel" Context="departure">
+    <Row @key="departure.Id">
+        <Column ColumnSize="ColumnSize.Is2">
+            @($"{departure.Departure:g}")
+        </Column>
+        <Column ColumnSize="ColumnSize.Is2">
+            @($"{departure.Delay:g}")
+        </Column>
+        <Column ColumnSize="ColumnSize.Is2">
+            @($"{departure.Boarding}")
+        </Column>
+        <Column ColumnSize="ColumnSize.Is2">
+            <NumericPicker TValue="int" Value="@departure.PassengerCount" ValueChanged="departure.UpdatePassengerCountAsync"/>
+        </Column>
+        <Column ColumnSize="ColumnSize.Is4">
+            <Flight ViewModel="departure.Flight"></Flight>
+        </Column>
+    </Row>
+</Repeater>
+</Container>

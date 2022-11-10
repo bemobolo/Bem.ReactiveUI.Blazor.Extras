@@ -1,0 +1,28 @@
+@inherits TestComponentBase<ViewModels.TestViewModel>
+
+@if (@ViewModel != null)
+{
+    <div>
+        <ul id="vmColl">
+        @foreach (var item in @From(x => x.ViewModel!.ObservableCollection).EmptyIfNull())
+        {
+            <li>@item.Value</li>
+        }
+        </ul>
+        <p id="vmValue">@From(x => x.ViewModel!.Value)</p>
+        <p id="vmObjectValue">@From(x => x.ViewModel!.TestObject!.Value)</p>
+        <InputNumber @ref="InputNumber" TValue="int" ValueExpression="() => ViewModel.Value" Value="@From(x => x.ViewModel!.Value)" />
+        <p id="rc">@RenderCount</p>
+        <button onclick="@ButtonClicked">Press Me</button>
+    </div>
+}
+
+@code
+{
+    internal InputNumber<int>? InputNumber;
+
+    private void ButtonClicked()
+    {
+        // do nothing
+    }
+}

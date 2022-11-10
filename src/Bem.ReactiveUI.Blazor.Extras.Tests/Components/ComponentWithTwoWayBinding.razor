@@ -1,0 +1,12 @@
+@using Microsoft.AspNetCore.Components.Forms
+@inherits TestComponentBase<ViewModels.StringsViewModel>
+
+@if (@ViewModel != null)
+{
+    <InputText id="first" @bind-Value="@ViewModel.First" />
+    <InputText id="first2" @bind-Value="@ViewModel.First" subscribe="@To(x => x.ViewModel!.First)" />
+    <InputText id="last" @bind-Value="@ViewModel.Last" />
+    <InputText id="last2" @bind-Value="@ViewModel.Last" />
+    <InputText id="city" @bind-Value="@ViewModel.City" />
+    <InputText id="city2" @bind-Value="@ViewModel.City" />@SubscribeTo(x => x.ViewModel!.City)
+}

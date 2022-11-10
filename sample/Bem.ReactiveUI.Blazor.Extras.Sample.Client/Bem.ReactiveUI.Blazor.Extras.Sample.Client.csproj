@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <LangVersion>12.0</LangVersion>
+    <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+    <StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <AnalysisLevel>latest-all</AnalysisLevel>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+	  <RootNamespace>Bem.ReactiveUI.Blazor.Extras.Sample.Client</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Collection" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.0" />
+  </ItemGroup>
+<ItemGroup>
+    <PackageReference Update="IDisposableAnalyzers" Version="4.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0-beta1.23525.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.9.1-alpha">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Roslynator.Analyzers" Version="4.8.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.16.0.82469">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>    
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Bem.ReactiveUI.Blazor.Extras\Bem.ReactiveUI.Blazor.Extras.csproj" />
+    <ProjectReference Include="..\Bem.ReactiveUI.Blazor.Extras.Sample.Shared\Bem.ReactiveUI.Blazor.Extras.Sample.Shared.csproj" />
+  </ItemGroup>
+</Project>

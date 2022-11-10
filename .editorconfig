@@ -1,0 +1,48 @@
+# NOTE: Requires **VS2019 16.3** or later
+
+root = true
+
+# Default
+end_of_line = crlf
+charset = utf-8-bom
+
+# Description:  
+
+# Code files
+[*.{cs,vb}]
+file_header_template = --------------------------------------\n<copyright file="{fileName}" company="Daniel Balogh">\n    Copyright (c) Daniel Balogh. All rights reserved.\n    Licensed under the GNU Generic Public License 3.0 license.\n    See LICENSE file in the project root for full license information.\n</copyright>\n--------------------------------------
+
+indent_style = space
+indent_size = 4
+
+dotnet_diagnostic.severity = error
+
+dotnet_diagnostic.CA1305.severity = suggestion
+
+dotnet_diagnostic.CA1307.severity = silent
+
+dotnet_diagnostic.RCS1002.severity = none
+
+dotnet_diagnostic.RCS1008.severity = none
+
+dotnet_diagnostic.RCS1009.severity = none
+
+dotnet_diagnostic.RCS1012.severity = none
+
+dotnet_diagnostic.RCS1208.severity = none
+
+dotnet_diagnostic.S1309.severity = suggestion
+
+dotnet_diagnostic.S2360.severity = suggestion
+
+dotnet_diagnostic.S3011.severity = suggestion
+
+dotnet_diagnostic.SA1101.severity = none
+
+dotnet_diagnostic.SA1200.severity = none
+
+dotnet_diagnostic.SA1201.severity = none
+
+dotnet_diagnostic.SA1309.severity = none
+
+dotnet_diagnostic.SA1404.severity = suggestion

@@ -1,0 +1,58 @@
+# NOTE: Requires **VS2019 16.3** or later
+
+# Code files
+[*.{cs,vb}]
+
+dotnet_diagnostic.CA1707.severity = none
+
+dotnet_diagnostic.SA0001.severity = none
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+
+# SA1601: Partial elements should be documented
+dotnet_diagnostic.SA1601.severity = none
+
+# BL0005: Component parameter should not be set outside of its component.
+dotnet_diagnostic.BL0005.severity = none
+
+# IDISP001: Dispose created
+dotnet_diagnostic.IDISP001.severity = none
+
+# IDISP004: Don't ignore created IDisposable
+dotnet_diagnostic.IDISP004.severity = none
+
+# AD0001: Analyzer Failure
+dotnet_diagnostic.AD0001.severity = none
+
+# IDE0005: Using directive is unnecessary.
+dotnet_diagnostic.IDE0005.severity = error
+# Code files
+[*.{cs,vb}]
+
+# CS1591: Missing XML comment for publicly visible type or member
+dotnet_diagnostic.CS1591.severity = none
+
+# CA1861: Avoid constant arrays as arguments
+dotnet_diagnostic.CA1861.severity = suggestion
+
+# CA2007: Consider calling ConfigureAwait on the awaited task
+dotnet_diagnostic.CA2007.severity = suggestion
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = none
+
+# CA1063: Implement IDisposable Correctly
+dotnet_diagnostic.CA1063.severity = suggestion
+
+# CA1816: Dispose methods should call SuppressFinalize
+dotnet_diagnostic.CA1816.severity = suggestion
+
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = none
+
+# CA2227: Collection properties should be read only
+dotnet_diagnostic.CA2227.severity = suggestion
+
+# CA1812: Avoid uninstantiated internal classes
+dotnet_diagnostic.CA1812.severity = none

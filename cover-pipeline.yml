@@ -1,0 +1,21 @@
+resources:
+  repositories:
+  - repository: source
+    type: github
+    endpoint: 'bemobolo'
+    name: 'bemobolo/Bem.ReactiveUI.Blazor.Extras'
+    ref: refs/heads/main
+    trigger: 
+    - main
+  - repository: templates
+    type: git
+    name: Bem.ReactiveUI.Blazor.Extras/Bem.ReactiveUI.Blazor.Extras
+
+variables:
+- template: release-variables.yml@templates
+
+pool:
+  vmImage: 'windows-latest'
+  
+jobs:
+  - template: cover-pipeline.yml@templates

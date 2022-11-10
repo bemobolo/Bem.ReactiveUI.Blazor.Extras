@@ -1,0 +1,22 @@
+# NOTE: Requires **VS2019 16.3** or later
+
+# Code files
+[*.{cs,vb}]
+
+dotnet_diagnostic.CA1707.severity = none
+
+dotnet_diagnostic.SA0001.severity = none
+
+dotnet_diagnostic.SA1600.severity = none
+
+# BL0005: Component parameter should not be set outside of its component.
+dotnet_diagnostic.BL0005.severity = none
+
+# IDISP001: Dispose created
+dotnet_diagnostic.IDISP001.severity = none
+
+# IDISP004: Don't ignore created IDisposable
+dotnet_diagnostic.IDISP004.severity = none
+
+# AD0001: Analyzer Failure
+dotnet_diagnostic.AD0001.severity = none

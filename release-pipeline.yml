@@ -1,0 +1,19 @@
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: Bem.ReactiveUI.Blazor.Extras/Bem.ReactiveUI.Blazor.Extras
+
+trigger:
+ tags:
+  include:
+    - release/*
+
+variables:
+- template: release-variables.yml@templates
+
+pool:
+  vmImage: 'windows-latest'
+
+jobs:
+  - template: release-pipeline.yml@templates

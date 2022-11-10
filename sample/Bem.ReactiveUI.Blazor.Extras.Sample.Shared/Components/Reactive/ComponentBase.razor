@@ -1,0 +1,7 @@
+@inherits ReactiveComponentBase<TViewModel>
+@typeparam TViewModel
+
+@code 
+{
+    protected RenderFragment RenderCountFragment => @<div class="render-count">Render Count: @RenderCount, Previous Render Time: @((int?)RenderTime?.TotalMilliseconds) ms</div>;
+}

@@ -1,0 +1,20 @@
+@using Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels
+@inherits ComponentBase<Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels.TerminalViewModel>
+<Container Class="flash">
+@RenderCountFragment
+<TextEdit Plaintext ReadOnly>Overall Outgoing Passengers: @ViewModel!.Expected24hOutgoingPassengers</TextEdit>
+<Tabs TabPosition="TabPosition.Top" RenderMode="TabsRenderMode.LazyLoad">
+    <Items>
+        <Tab Name="Departures">Departures</Tab>
+        <Tab Name="Arrivals">Arrivals</Tab>
+    </Items>
+    <Content>
+        <TabPanel Name="Departures">
+            <Departures ViewModel="@(ViewModel!.Departures)"></Departures>
+        </TabPanel>
+        <TabPanel Name="Arrivals">
+            <Arrivals ViewModel="@(ViewModel!.Arrivals)"></Arrivals>
+        </TabPanel>
+    </Content>
+</Tabs>
+</Container>

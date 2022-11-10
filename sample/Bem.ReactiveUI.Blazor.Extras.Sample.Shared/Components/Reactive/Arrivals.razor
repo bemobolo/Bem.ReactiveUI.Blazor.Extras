@@ -1,0 +1,26 @@
+@inherits ComponentBase<System.Collections.ObjectModel.ObservableCollection<Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels.ArrivalViewModel>>
+<Container Class="flash">
+@RenderCountFragment
+<Row>
+    <Column ColumnSize="ColumnSize.Is2">Arrival</Column>
+    <Column ColumnSize="ColumnSize.Is2">Delay</Column>
+    <Column ColumnSize="ColumnSize.Is2">PassengerCount</Column>
+    <Column ColumnSize="ColumnSize.Is6">Flight</Column>
+</Row>
+<Repeater Items="@ViewModel" Context="arrival">
+    <Row @key="arrival.Id">
+        <Column ColumnSize="ColumnSize.Is2">
+            @($"{arrival.Arrival:g}")
+        </Column>
+        <Column ColumnSize="ColumnSize.Is2">
+            @($"{arrival.Delay:g}")
+        </Column>
+        <Column ColumnSize="ColumnSize.Is2">
+            @arrival.PassengerCount
+        </Column>
+        <Column ColumnSize="ColumnSize.Is6">
+            <Flight ViewModel="arrival.Flight"></Flight>
+        </Column>
+    </Row>
+</Repeater>
+</Container>
