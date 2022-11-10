@@ -1,0 +1,12 @@
+# NOTE: Requires **VS2019 16.3** or later
+
+# Code files
+[*.{cs,vb}]
+
+dotnet_diagnostic.SA0001.severity = none
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+
+# RS1035: Do not use APIs banned for analyzers
+dotnet_diagnostic.RS1035.severity = none

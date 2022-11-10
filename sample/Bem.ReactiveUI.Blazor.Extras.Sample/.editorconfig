@@ -1,0 +1,13 @@
+﻿[*.cs]
+
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = none
+
+dotnet_diagnostic.CA1812.severity = none
+
+dotnet_diagnostic.CA1024.severity = suggestion
+
+dotnet_diagnostic.SA0001.severity = none
+
+# CA1852: Seal internal types
+dotnet_diagnostic.CA1852.severity = suggestion

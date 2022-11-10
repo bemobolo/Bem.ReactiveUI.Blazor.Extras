@@ -1,0 +1,10 @@
+﻿@inherits AdvancedComponentBase<Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels.IndexViewModel>
+@page "/extra"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>Bem.ReactiveUI.Blazor.Extras DEMO</PageTitle>
+
+@if (ViewModel != null)
+{
+    <AirportX ViewModel="@From(x => x.ViewModel!.Airport)" />
+}

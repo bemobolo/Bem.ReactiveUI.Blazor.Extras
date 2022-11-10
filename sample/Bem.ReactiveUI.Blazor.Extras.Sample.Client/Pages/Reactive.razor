@@ -1,0 +1,10 @@
+﻿@inherits ReactiveInjectableComponentBase<Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels.IndexViewModel>
+@page "/reactive"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>Standard Bem.ReactiveUI.Blazor.Extras DEMO</PageTitle>
+
+@if (ViewModel != null)
+{
+    <Airport ViewModel="ViewModel.Airport" />
+}

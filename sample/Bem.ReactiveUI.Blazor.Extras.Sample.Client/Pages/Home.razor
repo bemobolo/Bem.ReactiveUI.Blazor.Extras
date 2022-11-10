@@ -1,0 +1,19 @@
+﻿@page "/"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+<PageTitle>Bem.ReactiveUI.Blazor.Extras DEMO</PageTitle>
+
+<h1>Bem.ReactiveUI.Blazor.Extras DEMO site</h1>
+<p>
+    An example application implemented using both reactive and non-reactive way to showcase the benefits of the Bem.ReactiveUI.Blazor.Extras library and differences to the standard Blazor approach.<br/>
+    The domain of the application is a hypothetical airport. The app makes able to follow arrivals, departures, and provides some 
+    non real-life use-cases.
+</p>
+<p>
+    Open both pages in new tabs/windows next to each other. Any change made in one of the pages will be reflected in the other. This way it is easy to compare rendering speeds and UX.<br/>
+    Besides the approach nothing is different in the applications. They have same amount of data, features, component hierarchy, etc.<br/>
+    You can find the source code of the sample pages in the git repository at <NavLink href="https://github.com/bemobolo/Bem.ReactiveUI.Blazor.Extras">https://github.com/bemobolo/Bem.ReactiveUI.Blazor.Extras</NavLink><br/>
+    Note that CSS styling is minimal as you can see, sorry.<br/>
+
+    <NavLink href="extra">RX Extra Page</NavLink><br/>
+    <NavLink href="reactive">RX Page</NavLink>
+</p>

@@ -1,0 +1,29 @@
+@using System.Collections.ObjectModel
+@inherits ComponentBaseX<Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels.AirportViewModel>
+<Layout Class="flash">
+    <LayoutHeader>
+        <Container>
+            @RenderCountFragment
+            <TextEdit Text="@From(x => x.ViewModel!.Name)" TextChanged="@(UpdateAirportNameAsync)"/>
+            <Button Clicked="@(ResetViewModelAsync)">Reset</Button>
+        </Container>
+    </LayoutHeader>
+    <LayoutContent>
+        <Tabs TabPosition="TabPosition.Start" RenderMode="TabsRenderMode.LazyLoad">
+            <Items>
+                @foreach (var terminal in ViewModel!.Terminals)
+                {
+                    <Tab @key="@terminal.Name" Name="@terminal.Name">@terminal.Name</Tab>
+                }
+            </Items>
+            <Content>
+                @foreach (var terminal in ViewModel!.Terminals)
+                {
+                    <TabPanel @key="terminal.Name" Name="@terminal.Name">
+                        <TerminalX ViewModel="terminal" />
+                    </TabPanel>
+                }
+            </Content>
+        </Tabs>
+    </LayoutContent>
+</Layout>

@@ -1,0 +1,8 @@
+@inherits TestComponentBase<ViewModels.TestViewModel>
+
+<div>
+    <p id="integerParam">@IntegerParameter</p>
+    <p id="referenceParam">@ReferenceParameter?.GetHashCode()</p>
+    <p id="rc">@RenderCount</p>
+    <button onclick="@ButtonClicked">Press Me</button>
+</div>
