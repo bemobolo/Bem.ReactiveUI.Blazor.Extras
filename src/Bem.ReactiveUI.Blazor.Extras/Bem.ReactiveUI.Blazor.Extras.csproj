@@ -28,11 +28,11 @@
     <Authors>Daniel Balogh</Authors>
     <GITHUB_SERVER_URL>https://github.com</GITHUB_SERVER_URL>
     <GITHUB_REPOSITORY>bemobolo/Bem.ReactiveUI.Blazor.Extras</GITHUB_REPOSITORY>
-    <Description>A RectiveUI extension to make Blazor fast even if using complex view models.</Description>
+    <Description>An extension for ReactiveUI.Blazor to optimize change tracking of complex view models and make rendering more performant.</Description>
     <PackageProjectUrl>$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY)</PackageProjectUrl>
     <RepositoryUrl>$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY)</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>mvvm;reactiveui;rx;reactive extensions;observable;LINQ;eventsnet;netstandard;blazor;web;</PackageTags>
+    <PackageTags>mvvm;reactiveui;rx;reactive extensions;observable;netstandard;blazor;web;</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
