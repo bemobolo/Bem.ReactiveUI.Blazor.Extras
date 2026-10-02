@@ -34,7 +34,7 @@ internal sealed class InlineBindingStore : IDisposable
     internal int Count => _bindings.Count;
 
     internal IInlineBinding Bind<TSender, TValue>(TSender sender, Expression<Func<TSender, TValue>> propertyExpression)
-        where TSender : IAdvancedComponent
+        where TSender : class, IAdvancedComponent
     {
         var key = new BindingKey(sender, propertyExpression);
         var binding = _bindings.AddOrUpdate(key, _ => new InlineBinding<TSender, TValue>(sender, propertyExpression), (_, binding) => binding);

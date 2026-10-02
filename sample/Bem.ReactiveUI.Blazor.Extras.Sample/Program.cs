@@ -14,6 +14,7 @@ using Bem.ReactiveUI.Blazor.Extras.Sample.Components;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using ReactiveUI.Builder;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Sample
 {
@@ -21,6 +22,10 @@ namespace Bem.ReactiveUI.Blazor.Extras.Sample
     {
         public static void Main(string[] args)
         {
+            _ = RxAppBuilder.CreateReactiveUIBuilder()
+                .WithBlazor()
+                .BuildApp();
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -41,11 +46,13 @@ namespace Bem.ReactiveUI.Blazor.Extras.Sample
 
             builder.Services.AddSignalR();
 
-            builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
-            {
-                cfg.AddCollectionMappers();
-                cfg.AddProfile(new ViewModelProfile(provider.GetRequiredService<IServiceProvider>()));
-            }).CreateMapper());
+            builder.Services.AddSingleton(provider => new MapperConfiguration(
+                cfg =>
+                {
+                    cfg.AddCollectionMappers();
+                    cfg.AddProfile(new ViewModelProfile(provider.GetRequiredService<IServiceProvider>()));
+                },
+                provider.GetRequiredService<ILoggerFactory>()).CreateMapper());
 
             builder.Services.AddSingleton<IHubUrlHelper, LocalHubUrlHelper>();
             builder.Services.AddSingleton<IUpdatePublisher, UpdatePublisher>();

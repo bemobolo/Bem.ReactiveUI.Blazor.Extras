@@ -19,7 +19,7 @@ namespace Bem.ReactiveUI.Blazor.Extras.Tests.Internal.Bindings
         [Test]
         public void Dispose_Disposes_Bindings()
         {
-            using var component = RenderComponent<ComponentWithSingleViewModel>(ComponentParameter.CreateParameter("ViewModel", new TestViewModel()));
+            using var component = Context.Render<ComponentWithSingleViewModel>(parameters => parameters.Add(x => x.ViewModel, new TestViewModel()));
 
             InlineBindingStore store;
             InlineBinding<ComponentWithSingleViewModel, int> binding;
@@ -37,7 +37,7 @@ namespace Bem.ReactiveUI.Blazor.Extras.Tests.Internal.Bindings
         [Test]
         public void Sweep_Disposes_Bindings_Not_Used_Any_More()
         {
-            using var component = RenderComponent<ComponentWithSingleViewModel>(ComponentParameter.CreateParameter("ViewModel", new TestViewModel()));
+            using var component = Context.Render<ComponentWithSingleViewModel>(parameters => parameters.Add(x => x.ViewModel, new TestViewModel()));
 
             using var store = new InlineBindingStore();
 
@@ -55,7 +55,7 @@ namespace Bem.ReactiveUI.Blazor.Extras.Tests.Internal.Bindings
         [Test]
         public void Sweep_Keeps_Active_Bindings()
         {
-            using var component = RenderComponent<ComponentWithSingleViewModel>(ComponentParameter.CreateParameter("ViewModel", new TestViewModel()));
+            using var component = Context.Render<ComponentWithSingleViewModel>(parameters => parameters.Add(x => x.ViewModel, new TestViewModel()));
 
             using var store = new InlineBindingStore();
 

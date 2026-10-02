@@ -7,11 +7,11 @@
 // --------------------------------------
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Tests.ViewModels;
 
-public class TestObject : ReactiveObject
+public partial class TestObject : ReactiveObject
 {
     public TestObject(int value)
     {
@@ -19,5 +19,5 @@ public class TestObject : ReactiveObject
     }
 
     [Reactive]
-    public int Value { get; set; }
+    public partial int Value { get; set; }
 }

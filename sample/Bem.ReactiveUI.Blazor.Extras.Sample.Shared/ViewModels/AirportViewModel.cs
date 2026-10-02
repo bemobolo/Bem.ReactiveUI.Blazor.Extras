@@ -12,11 +12,11 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels;
 
-public sealed class AirportViewModel : ReactiveObject, IDisposable
+public sealed partial class AirportViewModel : ReactiveObject, IDisposable
 {
     private readonly IApiClient _apiClient;
     private readonly CompositeDisposable _compositeDisposable;
@@ -33,14 +33,14 @@ public sealed class AirportViewModel : ReactiveObject, IDisposable
     {
         _apiClient = apiClient;
 
-        updateReceiver.AirportNameChanged.BindTo(this, x => x.Name).DisposeWith(_compositeDisposable);
+        _compositeDisposable.Add(updateReceiver.AirportNameChanged.BindTo(this, x => x.Name));
     }
 
     [Reactive]
-    public string Name { get; set; } = default!;
+    public partial string Name { get; set; } = default!;
 
     [Reactive]
-    public ObservableCollection<TerminalViewModel> Terminals { get; init; } = new();
+    public partial ObservableCollection<TerminalViewModel> Terminals { get; set; } = new();
 
     public Task UpdateAirportNameAsync(string airportName)
     {

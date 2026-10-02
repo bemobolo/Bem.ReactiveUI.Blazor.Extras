@@ -13,3 +13,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Roslynator", "CA5394:Random is an insecure random number generator", Justification = "<Pending>", Scope = "type", Target = "~T:Bem.ReactiveUI.Blazor.Extras.Sample.Components.Pages.Weather")]
+[assembly: SuppressMessage("Minor Code Smell", "S6931:ASP.NET controller actions should not have a route template starting with \"/\"", Justification = "<Pending>", Scope = "type", Target = "~T:Bem.ReactiveUI.Blazor.Extras.Sample.Controllers.ViewModelController")]

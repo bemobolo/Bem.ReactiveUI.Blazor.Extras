@@ -14,6 +14,8 @@ namespace Bem.ReactiveUI.Blazor.Extras.CodeGenerators.Components;
 [Generator]
 public class AdvancedComponentGenerator : ISourceGenerator
 {
+    private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+
     public void Initialize(GeneratorInitializationContext context)
     {
         context.RegisterForSyntaxNotifications(() => new AdvancedComponentSyntaxReceiver());
@@ -135,7 +137,7 @@ public class AdvancedComponentGenerator : ISourceGenerator
         if (typeParameterName == null)
         {
             template = template.Replace("<TViewModel>", string.Empty);
-            template = Regex.Replace(template, @"\r?\n\s+where TViewModel[^\r\n]+", string.Empty, RegexOptions.Compiled | RegexOptions.Multiline);
+            template = Regex.Replace(template, @"\r?\n\s+where TViewModel[^\r\n]+", string.Empty, RegexOptions.Compiled | RegexOptions.Multiline, RegexTimeout);
         }
         else
         {
@@ -165,7 +167,7 @@ public class AdvancedComponentGenerator : ISourceGenerator
 
         if (hasVirtualDisposing)
         {
-            template = Regex.Replace(template, @"\r?\n\s+#region IDisposable[^#]+#endregion", string.Empty, RegexOptions.Multiline | RegexOptions.Compiled);
+            template = Regex.Replace(template, @"\r?\n\s+#region IDisposable[^#]+#endregion", string.Empty, RegexOptions.Multiline | RegexOptions.Compiled, RegexTimeout);
         }
 
         return template;
@@ -199,12 +201,12 @@ public class AdvancedComponentGenerator : ISourceGenerator
 
             if (removeBaseDisposeCall)
             {
-                template = Regex.Replace(template, @"\r?\n\s+base\.Dispose\(\);", string.Empty, RegexOptions.Compiled);
+                template = Regex.Replace(template, @"\r?\n\s+base\.Dispose\(\);", string.Empty, RegexOptions.Compiled, RegexTimeout);
             }
 
             if (removeBaseDisposingCall)
             {
-                template = Regex.Replace(template, @"\r?\n\s+base\.Dispose\(disposing\);", string.Empty, RegexOptions.Compiled);
+                template = Regex.Replace(template, @"\r?\n\s+base\.Dispose\(disposing\);", string.Empty, RegexOptions.Compiled, RegexTimeout);
             }
 
             return template;

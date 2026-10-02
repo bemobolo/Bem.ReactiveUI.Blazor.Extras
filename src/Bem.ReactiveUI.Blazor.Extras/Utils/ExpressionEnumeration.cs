@@ -11,7 +11,7 @@ using System.Collections;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Utils;
 
-internal class ExpressionEnumeration : ExpressionVisitor, IEnumerable<Expression>
+internal sealed class ExpressionEnumeration : ExpressionVisitor, IEnumerable<Expression>
 {
     private readonly List<Expression> _expressions = [];
 

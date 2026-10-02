@@ -11,7 +11,7 @@ using Bem.ReactiveUI.Blazor.Extras.Extensions;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Utils;
 
-internal class HashCodeCalculation : ExpressionVisitor
+internal sealed class HashCodeCalculation : ExpressionVisitor
 {
     internal HashCodeCalculation(Expression expression)
     {

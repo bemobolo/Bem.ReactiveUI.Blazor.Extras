@@ -7,18 +7,18 @@
 // --------------------------------------
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Tests.ViewModels;
 
-public class StringsViewModel : ReactiveObject
+public partial class StringsViewModel : ReactiveObject
 {
     [Reactive]
-    public string? First { get; set; }
+    public partial string? First { get; set; }
 
     [Reactive]
-    public string? Last { get; set; }
+    public partial string? Last { get; set; }
 
     [Reactive]
-    public string? City { get; set; }
+    public partial string? City { get; set; }
 }

@@ -4,16 +4,16 @@
     <LayoutHeader>
         <Container>
             @RenderCountFragment
-            <TextEdit Text="@ViewModel!.Name" TextChanged="@(UpdateAirportNameAsync)"/>
+            <TextInput Value="@ViewModel!.Name" ValueChanged="@(UpdateAirportNameAsync)"/>
             <Button Clicked="@(ResetViewModelAsync)">Reset</Button>
         </Container>
     </LayoutHeader>
     <LayoutContent>
         <Tabs TabPosition="TabPosition.Start" RenderMode="TabsRenderMode.LazyLoad">
             <Items>
-                @foreach (var terminal in ViewModel!.Terminals)
+                @foreach (var terminalName in ViewModel!.Terminals.Select(terminal => terminal.Name))
                 {
-                    <Tab @key="@terminal.Name" Name="@terminal.Name">@terminal.Name</Tab>
+                    <Tab @key="@terminalName" Name="@terminalName">@terminalName</Tab>
                 }
             </Items>
             <Content>

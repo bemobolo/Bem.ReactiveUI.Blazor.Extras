@@ -8,11 +8,11 @@
 
 using System;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels;
 
-public abstract class JourneyViewModel : ReactiveObject
+public abstract partial class JourneyViewModel : ReactiveObject
 {
     protected JourneyViewModel()
     {
@@ -22,11 +22,11 @@ public abstract class JourneyViewModel : ReactiveObject
     public int Id { get; set; }
 
     [Reactive]
-    public FlightViewModel Flight { get; set; }
+    public partial FlightViewModel Flight { get; set; }
 
     [Reactive]
-    public int PassengerCount { get; set; }
+    public partial int PassengerCount { get; set; }
 
     [Reactive]
-    public TimeSpan Delay { get; set; }
+    public partial TimeSpan Delay { get; set; }
 }

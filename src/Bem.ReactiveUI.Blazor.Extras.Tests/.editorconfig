@@ -20,3 +20,6 @@ dotnet_diagnostic.IDISP004.severity = none
 
 # AD0001: Analyzer Failure
 dotnet_diagnostic.AD0001.severity = none
+
+# CA1515: Consider making public types internal
+dotnet_diagnostic.CA1515.severity = none

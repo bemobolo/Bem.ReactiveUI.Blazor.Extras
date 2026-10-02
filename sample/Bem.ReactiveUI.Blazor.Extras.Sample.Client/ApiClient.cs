@@ -29,14 +29,14 @@ internal sealed class ApiClient : IApiClient
 
     public async Task UpdatePassengerCountAsync(int departureId, int passengerCount)
     {
-        var response = await _httpClient.PutAsync($"departures/{departureId}/{passengerCount}", null);
+        using var response = await _httpClient.PutAsync($"departures/{departureId}/{passengerCount}", null);
 
         response.EnsureSuccessStatusCode();
     }
 
     public async Task UpdateAirportNameAsync(string airportName)
     {
-        var response = await _httpClient.PutAsync($"airport/{airportName}", null);
+        using var response = await _httpClient.PutAsync($"airport/{airportName}", null);
 
         response.EnsureSuccessStatusCode();
     }
@@ -50,7 +50,7 @@ internal sealed class ApiClient : IApiClient
 
     public async Task ResetAirportViewModelAsync()
     {
-        var response = await _httpClient.PutAsync("airport/reset", null);
+        using var response = await _httpClient.PutAsync("airport/reset", null);
 
         response.EnsureSuccessStatusCode();
     }

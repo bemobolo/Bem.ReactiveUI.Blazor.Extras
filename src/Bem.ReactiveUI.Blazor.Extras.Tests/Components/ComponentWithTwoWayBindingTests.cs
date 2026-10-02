@@ -28,7 +28,7 @@ public class ComponentWithTwoWayBindingTests : BunitTestContext
     public void Rerenders_Component_When_Subscribed_And_Input_Value_Changes_Even_If_ForceRenderOnEvent_Disabled()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithTwoWayBinding>(ComponentParameter.CreateParameter("ViewModel", _viewModel));
+        using var component = Context.Render<ComponentWithTwoWayBinding>(parameters => parameters.Add(x => x.ViewModel, _viewModel));
 
         component.Instance.ForceRenderOnEvent = false;
         component.Find("input#first").As<IHtmlInputElement>()!.Change("first");
@@ -41,7 +41,7 @@ public class ComponentWithTwoWayBindingTests : BunitTestContext
     public void Does_Not_Rerender_Component_When_Not_Subscribed_And_ForceRenderOnEvent_Disabled_And_Input_Value_Changes()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithTwoWayBinding>(ComponentParameter.CreateParameter("ViewModel", _viewModel));
+        using var component = Context.Render<ComponentWithTwoWayBinding>(parameters => parameters.Add(x => x.ViewModel, _viewModel));
 
         component.Instance.ForceRenderOnEvent = false;
         component.Find("input#last").As<IHtmlInputElement>()!.Change("last");

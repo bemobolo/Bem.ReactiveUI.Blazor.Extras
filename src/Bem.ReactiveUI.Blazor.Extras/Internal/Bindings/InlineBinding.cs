@@ -16,7 +16,7 @@ using ReactiveUI;
 namespace Bem.ReactiveUI.Blazor.Extras.Internal.Bindings
 {
     internal sealed class InlineBinding<TSender, TValue> : IInlineBinding<TValue>
-        where TSender : IAdvancedComponent
+        where TSender : class, IAdvancedComponent
     {
         private readonly IDisposable _propertyChangeSubscription;
         private readonly bool _isReactiveCollection;
@@ -35,7 +35,7 @@ namespace Bem.ReactiveUI.Blazor.Extras.Internal.Bindings
                                     propertyType.GetInterface(typeof(IEnumerable<>).FullName!) != null;
 
             _propertyChangeSubscription = source
-                .WhenAnyValue(propertyExpression)
+                .WhenAnyValueUnsafe(propertyExpression)
                 .Select((value, i) => (value, i))
                 .Subscribe(UpdateValueAndRaiseStateHasChanged);
 
@@ -123,7 +123,7 @@ namespace Bem.ReactiveUI.Blazor.Extras.Internal.Bindings
                     _collectionSubscriptionDelegate ??= CreateCollectionSubscriptionDelegate();
 
                     _collectionChangeSubscription =
-                        (IDisposable)_collectionSubscriptionDelegate!.DynamicInvoke(_source, value)!;
+                        (IDisposable)_collectionSubscriptionDelegate.DynamicInvoke(_source, value)!;
                 }
             }
         }

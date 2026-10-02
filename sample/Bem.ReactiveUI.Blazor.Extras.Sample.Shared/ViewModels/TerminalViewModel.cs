@@ -15,11 +15,12 @@ using DynamicData;
 using DynamicData.Binding;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
+using PrimitivesLinq = ReactiveUI.Primitives.LinqExtensions;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels;
 
-public sealed class TerminalViewModel : ReactiveObject, IDisposable
+public sealed partial class TerminalViewModel : ReactiveObject, IDisposable
 {
     private readonly CompositeDisposable _compositeDisposable;
     private IDisposable? _expected24HOutgoingPassengerCountSubscription;
@@ -29,8 +30,7 @@ public sealed class TerminalViewModel : ReactiveObject, IDisposable
         _expected24HOutgoingPassengerCountSubscription = default!;
         _compositeDisposable = new();
 
-        this.WhenAnyValue(x => x.Departures)
-            .ObserveOn(RxApp.MainThreadScheduler)
+        _compositeDisposable.Add(PrimitivesLinq.ObserveOn(this.WhenAnyValue(x => x.Departures), RxSchedulers.MainThreadScheduler)
             .Subscribe(coll =>
             {
                 _expected24HOutgoingPassengerCountSubscription?.Dispose();
@@ -39,14 +39,14 @@ public sealed class TerminalViewModel : ReactiveObject, IDisposable
                     .AutoRefresh(x => x.PassengerCount)
                     .Select(_ => Departures.Sum(x => x.PassengerCount))
                     .BindTo(this, x => x.Expected24hOutgoingPassengers);
-            }).DisposeWith(_compositeDisposable);
+            }));
     }
 
     [ActivatorUtilitiesConstructor]
     public TerminalViewModel(IUpdateReceiver updateReceiver)
         : this()
     {
-        updateReceiver.PassengerCountChanged.Subscribe(passengerCountChanged =>
+        _compositeDisposable.Add(updateReceiver.PassengerCountChanged.Subscribe(passengerCountChanged =>
         {
             var departure =
                 Departures.FirstOrDefault(departure => departure.Id == passengerCountChanged.DepartureId);
@@ -54,21 +54,20 @@ public sealed class TerminalViewModel : ReactiveObject, IDisposable
             {
                 departure.PassengerCount = passengerCountChanged.PassengerCount;
             }
-        })
-        .DisposeWith(_compositeDisposable);
+        }));
     }
 
     [Reactive]
-    public int Expected24hOutgoingPassengers { get; set; }
+    public partial int Expected24hOutgoingPassengers { get; set; }
 
     [Reactive]
-    public string Name { get; set; } = default!;
+    public partial string Name { get; set; } = default!;
 
     [Reactive]
-    public ObservableCollection<ArrivalViewModel> Arrivals { get; init; } = new();
+    public partial ObservableCollection<ArrivalViewModel> Arrivals { get; set; } = new();
 
     [Reactive]
-    public ObservableCollection<DepartureViewModel> Departures { get; init; } = new();
+    public partial ObservableCollection<DepartureViewModel> Departures { get; set; } = new();
 
     public void Dispose()
     {

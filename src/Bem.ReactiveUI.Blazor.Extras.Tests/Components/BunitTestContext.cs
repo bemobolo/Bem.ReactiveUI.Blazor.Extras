@@ -15,15 +15,17 @@ namespace Bem.ReactiveUI.Blazor.Extras.Tests.Components
     /// Test context wrapper for bUnit.
     /// Read more about using <see cref="BunitTestContext"/> <seealso href="https://bunit.dev/docs/getting-started/writing-tests.html#remove-boilerplate-code-from-tests">here</seealso>.
     /// </summary>
-    public abstract class BunitTestContext : TestContextWrapper
+    public abstract class BunitTestContext
     {
+        protected BunitContext Context { get; private set; } = default!;
+
         [SetUp]
         public virtual void Setup()
         {
-            TestContext = new Bunit.TestContext();
+            Context = new BunitContext();
         }
 
         [TearDown]
-        public virtual void TearDown() => TestContext?.Dispose();
+        public virtual void TearDown() => Context?.Dispose();
     }
 }

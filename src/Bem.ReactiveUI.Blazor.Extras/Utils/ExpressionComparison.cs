@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Utils;
 
-internal class ExpressionComparison : ExpressionVisitor
+internal sealed class ExpressionComparison : ExpressionVisitor
 {
     private readonly Queue<Expression> _candidates = default!;
     private Expression? _candidate;
@@ -224,7 +224,7 @@ internal class ExpressionComparison : ExpressionVisitor
             return;
         }
 
-        if (!CheckAreOfSameSize(collection, candidates))
+        if (!CheckEqual(collection.Count, candidates.Count))
         {
             return;
         }
@@ -237,11 +237,6 @@ internal class ExpressionComparison : ExpressionVisitor
                 return;
             }
         }
-    }
-
-    private bool CheckAreOfSameSize<T>(ICollection<T> collection, ICollection<T> candidate)
-    {
-        return CheckEqual(collection.Count, candidate.Count);
     }
 
     private bool CheckNotNull<T>(T? t)

@@ -27,7 +27,7 @@ public class ComponentWithConditionalFragmentsTests : BunitTestContext
     public void Render_Discards_Binding_NotUsed()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithConditionalFragments>(ComponentParameter.CreateParameter("ViewModel", _viewModel));
+        using var component = Context.Render<ComponentWithConditionalFragments>(parameters => parameters.Add(x => x.ViewModel, _viewModel));
         component.Instance.CityVisible = false;
         component.Instance.StateHasChanged();
 
@@ -38,7 +38,7 @@ public class ComponentWithConditionalFragmentsTests : BunitTestContext
     public void Render_Creates_Bindings()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithConditionalFragments>(ComponentParameter.CreateParameter("ViewModel", _viewModel));
+        using var component = Context.Render<ComponentWithConditionalFragments>(parameters => parameters.Add(x => x.ViewModel, _viewModel));
 
         Assert.That(component.Instance.InlineBindings.Count, Is.EqualTo(2));
     }

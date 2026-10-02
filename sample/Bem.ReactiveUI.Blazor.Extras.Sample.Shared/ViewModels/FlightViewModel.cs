@@ -7,18 +7,18 @@
 // --------------------------------------
 
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels;
 
-public class FlightViewModel : ReactiveObject
+public partial class FlightViewModel : ReactiveObject
 {
     [Reactive]
-    public string Airline { get; set; } = default!;
+    public partial string Airline { get; set; } = default!;
 
     [Reactive]
-    public string Code { get; set; } = default!;
+    public partial string Code { get; set; } = default!;
 
     [Reactive]
-    public string PlaneType { get; set; } = default!;
+    public partial string PlaneType { get; set; } = default!;
 }

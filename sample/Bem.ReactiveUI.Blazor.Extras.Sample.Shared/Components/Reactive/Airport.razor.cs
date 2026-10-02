@@ -15,7 +15,7 @@ public partial class Airport
     private Task UpdateAirportNameAsync(string name)
     {
         ViewModel!.Name = name;
-        return ViewModel!.UpdateAirportNameAsync(name);
+        return ViewModel.UpdateAirportNameAsync(name);
     }
 
     private Task ResetViewModelAsync()

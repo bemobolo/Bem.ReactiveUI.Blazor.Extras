@@ -26,17 +26,12 @@ public abstract class SignalRClientBase : ISignalRClient
 
     public async ValueTask DisposeAsync()
     {
-        await DisposeAsync(true);
+        await DisposeAsyncCore();
         GC.SuppressFinalize(this);
     }
 
-    protected virtual ValueTask DisposeAsync(bool disposing)
+    protected virtual ValueTask DisposeAsyncCore()
     {
-        if (disposing)
-        {
-            return HubConnection.DisposeAsync();
-        }
-
-        return ValueTask.CompletedTask;
+        return HubConnection.DisposeAsync();
     }
 }

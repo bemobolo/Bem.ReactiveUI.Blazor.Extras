@@ -30,7 +30,7 @@ public class ComponentWithSingleViewModelTests : BunitTestContext
     public void Renders_Component()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithSingleViewModel>(ComponentParameter.CreateParameter("ViewModel", _viewModel));
+        using var component = Context.Render<ComponentWithSingleViewModel>(parameters => parameters.Add(x => x.ViewModel, _viewModel));
 
         AssertComponent(component, vmValue: 1, vmObjectValue: 2, vmCollectionItems: [3], renderCount: 1);
     }
@@ -39,7 +39,7 @@ public class ComponentWithSingleViewModelTests : BunitTestContext
     public void Renders_Component_Even_If_Bound_Property_Chain_Has_NullReferences()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithSingleViewModel>(ComponentParameter.CreateParameter("ViewModel", new TestViewModel()));
+        using var component = Context.Render<ComponentWithSingleViewModel>(parameters => parameters.Add(x => x.ViewModel, new TestViewModel()));
 
         Assert.That(component.Find("div > p#vmValue").InnerHtml, Is.EqualTo("0"));
         Assert.That(component.Find("div > p#vmObjectValue").InnerHtml, Is.EqualTo("0"));
@@ -52,7 +52,7 @@ public class ComponentWithSingleViewModelTests : BunitTestContext
     public void Rerenders_When_Bound_Object_Changes()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithSingleViewModel>(ComponentParameter.CreateParameter("ViewModel", _viewModel));
+        using var component = Context.Render<ComponentWithSingleViewModel>(parameters => parameters.Add(x => x.ViewModel, _viewModel));
         _viewModel.TestObject = new TestObject(5);
 
         AssertComponent(component, vmValue: 1, vmObjectValue: 5, vmCollectionItems: [3], renderCount: 2);
@@ -62,7 +62,7 @@ public class ComponentWithSingleViewModelTests : BunitTestContext
     public void Rerenders_When_Bound_Property_Changes()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithSingleViewModel>(ComponentParameter.CreateParameter("ViewModel", _viewModel));
+        using var component = Context.Render<ComponentWithSingleViewModel>(parameters => parameters.Add(x => x.ViewModel, _viewModel));
         _viewModel.Value = 4;
 
         AssertComponent(component, vmValue: 4, vmObjectValue: 2, vmCollectionItems: [3], renderCount: 2);
@@ -72,7 +72,7 @@ public class ComponentWithSingleViewModelTests : BunitTestContext
     public void Rerenders_When_Bound_Property_Of_Reactive_Object_Changes()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithSingleViewModel>(ComponentParameter.CreateParameter("ViewModel", _viewModel));
+        using var component = Context.Render<ComponentWithSingleViewModel>(parameters => parameters.Add(x => x.ViewModel, _viewModel));
         _viewModel.TestObject!.Value = 4;
 
         AssertComponent(component, vmValue: 1, vmObjectValue: 4, vmCollectionItems: [3], renderCount: 2);
@@ -82,7 +82,7 @@ public class ComponentWithSingleViewModelTests : BunitTestContext
     public void Rerenders_When_Item_In_ObservableCollection_Changes()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithSingleViewModel>(ComponentParameter.CreateParameter("ViewModel", _viewModel));
+        using var component = Context.Render<ComponentWithSingleViewModel>(parameters => parameters.Add(x => x.ViewModel, _viewModel));
         _viewModel.ObservableCollection![0].Value = 5;
 
         AssertComponent(component, vmValue: 1, vmObjectValue: 2, vmCollectionItems: [5], renderCount: 2);
@@ -92,7 +92,7 @@ public class ComponentWithSingleViewModelTests : BunitTestContext
     public void Rerenders_When_ObservableCollection_Changes()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithSingleViewModel>(ComponentParameter.CreateParameter("ViewModel", _viewModel));
+        using var component = Context.Render<ComponentWithSingleViewModel>(parameters => parameters.Add(x => x.ViewModel, _viewModel));
         _viewModel.ObservableCollection!.Add(new TestObject(6));
 
         AssertComponent(component, vmValue: 1, vmObjectValue: 2, vmCollectionItems: [3, 6], renderCount: 2);
@@ -102,7 +102,7 @@ public class ComponentWithSingleViewModelTests : BunitTestContext
     public void Rerenders_When_ForceRenderOnEvent_Enabled_And_Event_Handled()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithSingleViewModel>(ComponentParameter.CreateParameter("ViewModel", _viewModel));
+        using var component = Context.Render<ComponentWithSingleViewModel>(parameters => parameters.Add(x => x.ViewModel, _viewModel));
         component.Instance.ForceRenderOnEvent = true;
 
         component.Find("div > button").Click();
@@ -114,7 +114,7 @@ public class ComponentWithSingleViewModelTests : BunitTestContext
     public void Does_Not_Rerender_When_AutoRenderOnEvent_Disabled_And_Event_Handled()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithSingleViewModel>(ComponentParameter.CreateParameter("ViewModel", _viewModel));
+        using var component = Context.Render<ComponentWithSingleViewModel>(parameters => parameters.Add(x => x.ViewModel, _viewModel));
         component.Instance.ForceRenderOnEvent = false;
 
         component.Find("div > button").Click();

@@ -7,12 +7,12 @@
 // --------------------------------------
 
 using System;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels;
 
-public class ArrivalViewModel : JourneyViewModel
+public partial class ArrivalViewModel : JourneyViewModel
 {
     [Reactive]
-    public DateTime Arrival { get; set; }
+    public partial DateTime Arrival { get; set; }
 }

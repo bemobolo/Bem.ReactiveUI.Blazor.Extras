@@ -9,11 +9,11 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels;
 
-public sealed class DepartureViewModel : JourneyViewModel
+public sealed partial class DepartureViewModel : JourneyViewModel
 {
     private readonly IApiClient _apiClient;
 
@@ -29,10 +29,10 @@ public sealed class DepartureViewModel : JourneyViewModel
     }
 
     [Reactive]
-    public bool Boarding { get; set; }
+    public partial bool Boarding { get; set; }
 
     [Reactive]
-    public DateTime Departure { get; set; }
+    public partial DateTime Departure { get; set; }
 
     public Task UpdatePassengerCountAsync(int passengerCount)
     {

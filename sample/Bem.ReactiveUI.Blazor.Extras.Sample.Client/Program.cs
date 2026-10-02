@@ -10,6 +10,7 @@ using AutoMapper;
 using AutoMapper.EquivalencyExpression;
 using Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using ReactiveUI.Builder;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Sample.Client;
 
@@ -17,10 +18,14 @@ public static class Program
 {
     public static Task Main(string[] args)
     {
+        _ = RxAppBuilder.CreateReactiveUIBuilder()
+            .WithBlazorWasm()
+            .BuildApp();
+
         var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-        builder.Services.AddSingleton(_ =>
-            (IApiClient)new ApiClient(new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) }));
+        builder.Services.AddSingleton(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+        builder.Services.AddSingleton(provider => (IApiClient)new ApiClient(provider.GetRequiredService<HttpClient>()));
 
         AddServices(builder.Services);
 
@@ -38,10 +43,12 @@ public static class Program
         serviceCollection.AddTransient<DepartureViewModel>();
         serviceCollection.AddTransient<TerminalViewModel>();
 
-        serviceCollection.AddSingleton(provider => new MapperConfiguration(cfg =>
-        {
-            cfg.AddCollectionMappers();
-            cfg.AddProfile(new ViewModelProfile(provider.GetRequiredService<IServiceProvider>()));
-        }).CreateMapper());
+        serviceCollection.AddSingleton(provider => new MapperConfiguration(
+            cfg =>
+            {
+                cfg.AddCollectionMappers();
+                cfg.AddProfile(new ViewModelProfile(provider.GetRequiredService<IServiceProvider>()));
+            },
+            provider.GetRequiredService<ILoggerFactory>()).CreateMapper());
     }
 }

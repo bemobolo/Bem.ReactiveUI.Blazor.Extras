@@ -3,12 +3,12 @@
 @RenderCountFragment
 <Row>
     <Column ColumnSize="ColumnSize.IsHalf">
-        <TextEdit Plaintext ReadOnly>Airline</TextEdit>
-        <TextEdit Plaintext ReadOnly>@(ViewModel?.Airline)</TextEdit>
+        <TextInput Plaintext ReadOnly>Airline</TextInput>
+        <TextInput Plaintext ReadOnly>@(ViewModel?.Airline)</TextInput>
     </Column>
     <Column ColumnSize="ColumnSize.IsHalf">
-        <TextEdit Plaintext ReadOnly>Plane Type</TextEdit>
-        <TextEdit Plaintext ReadOnly>@(ViewModel?.PlaneType)</TextEdit>
+        <TextInput Plaintext ReadOnly>Plane Type</TextInput>
+        <TextInput Plaintext ReadOnly>@(ViewModel?.PlaneType)</TextInput>
     </Column>
 </Row>
 </Container>

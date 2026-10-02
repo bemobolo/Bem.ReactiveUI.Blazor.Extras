@@ -26,9 +26,9 @@ public class ComponentWithParametersTests : BunitTestContext
     public void Rerenders_Component_When_Event_Occurs_And_Mutable_Parameter_Available()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithParameters>(
-            ComponentParameter.CreateParameter(nameof(ComponentWithParameters.IntegerParameter), 1),
-            ComponentParameter.CreateParameter(nameof(ComponentWithParameters.ReferenceParameter), _object));
+        using var component = Context.Render<ComponentWithParameters>(parameters => parameters
+            .Add(x => x.IntegerParameter, 1)
+            .Add(x => x.ReferenceParameter, _object));
 
         component.Instance.ForceRenderOnEvent = false;
         component.Find("div > button").Click();
@@ -40,13 +40,13 @@ public class ComponentWithParametersTests : BunitTestContext
     public void Rerenders_Component_When_Mutable_Parameter_Not_Available_Any_More()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithParameters>(
-            ComponentParameter.CreateParameter(nameof(ComponentWithParameters.IntegerParameter), 1),
-            ComponentParameter.CreateParameter(nameof(ComponentWithParameters.ReferenceParameter), _object));
+        using var component = Context.Render<ComponentWithParameters>(parameters => parameters
+            .Add(x => x.IntegerParameter, 1)
+            .Add(x => x.ReferenceParameter, _object));
 
-        component.SetParametersAndRender(
-            ComponentParameter.CreateParameter(nameof(ComponentWithParameters.IntegerParameter), 1),
-            ComponentParameter.CreateParameter(nameof(ComponentWithParameters.ReferenceParameter), null));
+        component.Render(parameters => parameters
+            .Add(x => x.IntegerParameter, 1)
+            .Add(x => x.ReferenceParameter, null));
 
         AssertComponent(component, integerParameter: 1, referenceParameter: null, renderCount: 2);
     }
@@ -55,12 +55,12 @@ public class ComponentWithParametersTests : BunitTestContext
     public void Rerenders_Component_When_Mutable_Parameter_Not_Set()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithParameters>(
-            ComponentParameter.CreateParameter(nameof(ComponentWithParameters.IntegerParameter), 1),
-            ComponentParameter.CreateParameter(nameof(ComponentWithParameters.ReferenceParameter), _object));
+        using var component = Context.Render<ComponentWithParameters>(parameters => parameters
+            .Add(x => x.IntegerParameter, 1)
+            .Add(x => x.ReferenceParameter, _object));
 
-        component.SetParametersAndRender(
-            ComponentParameter.CreateParameter(nameof(ComponentWithParameters.IntegerParameter), 1));
+        component.Render(parameters => parameters
+            .Add(x => x.IntegerParameter, 1));
 
         AssertComponent(component, integerParameter: 1, referenceParameter: _object, renderCount: 2);
     }
@@ -69,12 +69,12 @@ public class ComponentWithParametersTests : BunitTestContext
     public void Does_Not_Rerender_Component_When_Mutable_Parameter_Was_Null_And_Not_Set()
     {
         // Arrange
-        using var component = RenderComponent<ComponentWithParameters>(
-            ComponentParameter.CreateParameter(nameof(ComponentWithParameters.IntegerParameter), 1),
-            ComponentParameter.CreateParameter(nameof(ComponentWithParameters.ReferenceParameter), null));
+        using var component = Context.Render<ComponentWithParameters>(parameters => parameters
+            .Add(x => x.IntegerParameter, 1)
+            .Add(x => x.ReferenceParameter, null));
 
-        component.SetParametersAndRender(
-            ComponentParameter.CreateParameter(nameof(ComponentWithParameters.IntegerParameter), 1));
+        component.Render(parameters => parameters
+            .Add(x => x.IntegerParameter, 1));
 
         AssertComponent(component, integerParameter: 1, referenceParameter: null, renderCount: 1);
     }

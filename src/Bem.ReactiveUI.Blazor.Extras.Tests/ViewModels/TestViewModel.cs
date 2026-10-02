@@ -8,18 +8,18 @@
 
 using System.Collections.ObjectModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Tests.ViewModels;
 
-public class TestViewModel : ReactiveObject
+public partial class TestViewModel : ReactiveObject
 {
     [Reactive]
-    public int Value { get; set; }
+    public partial int Value { get; set; }
 
     [Reactive]
-    public TestObject? TestObject { get; set; }
+    public partial TestObject? TestObject { get; set; }
 
     [Reactive]
-    public ObservableCollection<TestObject>? ObservableCollection { get; set; }
+    public partial ObservableCollection<TestObject>? ObservableCollection { get; set; }
 }

@@ -10,11 +10,12 @@ using System;
 using System.Reactive.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using ReactiveUI.SourceGenerators;
+using PrimitivesLinq = ReactiveUI.Primitives.LinqExtensions;
 
 namespace Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels
 {
-    public sealed class IndexViewModel : ReactiveObject, IDisposable
+    public sealed partial class IndexViewModel : ReactiveObject, IDisposable
     {
         private readonly IDisposable? _subscription;
 
@@ -26,7 +27,7 @@ namespace Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels
         public IndexViewModel(IViewModelProvider viewModelProvider)
             : this()
         {
-            _subscription = viewModelProvider.AirportViewModels.ObserveOn(RxApp.MainThreadScheduler).Subscribe(airportViewModel =>
+            _subscription = PrimitivesLinq.ObserveOn(viewModelProvider.AirportViewModels, RxSchedulers.MainThreadScheduler).Subscribe(airportViewModel =>
             {
                 using var oldAirport = Airport;
                 Airport = airportViewModel;
@@ -34,7 +35,7 @@ namespace Bem.ReactiveUI.Blazor.Extras.Sample.ViewModels
         }
 
         [Reactive]
-        public AirportViewModel Airport { get; set; } = new();
+        public partial AirportViewModel Airport { get; set; } = new();
 
         public void Dispose()
         {
