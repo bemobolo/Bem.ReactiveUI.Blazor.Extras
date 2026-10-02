@@ -8,15 +8,18 @@
 
 namespace Bem.ReactiveUI.Blazor.Extras.CodeGenerators.Components;
 
-internal sealed class AdvancedComponentContext
-{
-    internal AdvancedComponentContext(ClassDeclarationSyntax classDeclaration, INamedTypeSymbol componentSymbol)
-    {
-        ClassDeclaration = classDeclaration;
-        ComponentSymbol = componentSymbol;
-    }
+/// <summary>
+/// Equatable model of a component collected by the incremental pipeline. It must not hold syntax nodes or symbols so that the pipeline can cache it between compilations.
+/// </summary>
+internal sealed record AdvancedComponentContext(
+    string ClassName,
+    string Namespace,
+    string? TypeParameterName,
+    DisposeMethods DisposeMethods,
+    DiagnosticInfo? Diagnostic);
 
-    internal ClassDeclarationSyntax ClassDeclaration { get; }
-
-    internal INamedTypeSymbol ComponentSymbol { get; }
-}
+internal readonly record struct DisposeMethods(
+    bool HasDispose,
+    bool HasVirtualDispose,
+    bool HasDisposing,
+    bool HasVirtualDisposing);

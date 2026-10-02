@@ -40,16 +40,15 @@
 	<ItemGroup>
 		<None Include="icon.png" Pack="true" PackagePath="" />
 	</ItemGroup>
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net8')) ">
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.*" />
-  </ItemGroup>
+  <!-- Microsoft.AspNetCore.Components major versions are bound to the target framework (10.x supports net10.0 only), so the version is set per target framework here. -->
+  <PropertyGroup>
+    <AspNetCoreComponentsVersion Condition=" '$(TargetFramework)' == 'net8.0' ">8.0.31</AspNetCoreComponentsVersion>
+    <AspNetCoreComponentsVersion Condition=" '$(TargetFramework)' == 'net9.0' ">9.0.20</AspNetCoreComponentsVersion>
+    <AspNetCoreComponentsVersion Condition=" '$(TargetFramework)' == 'net10.0' ">10.0.12</AspNetCoreComponentsVersion>
+  </PropertyGroup>
 
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net9')) ">
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="9.*" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net10')) ">
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="10.*" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="$(AspNetCoreComponentsVersion)" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.401" PrivateAssets="All" />

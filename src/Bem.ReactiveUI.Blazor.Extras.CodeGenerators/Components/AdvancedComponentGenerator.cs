@@ -12,63 +12,59 @@ using Bem.ReactiveUI.Blazor.Extras.CodeGenerators.Extensions;
 namespace Bem.ReactiveUI.Blazor.Extras.CodeGenerators.Components;
 
 [Generator]
-public class AdvancedComponentGenerator : ISourceGenerator
+public class AdvancedComponentGenerator : IIncrementalGenerator
 {
+    private const string AdvancedComponentAttributeName = "Bem.ReactiveUI.Blazor.Extras.Components.AdvancedComponentAttribute";
+    private const string ComponentBaseName = "Microsoft.AspNetCore.Components.ComponentBase";
+
     private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
 
-    public void Initialize(GeneratorInitializationContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.RegisterForSyntaxNotifications(() => new AdvancedComponentSyntaxReceiver());
+        var componentContexts = context.SyntaxProvider.ForAttributeWithMetadataName(
+            AdvancedComponentAttributeName,
+            static (node, _) => node is ClassDeclarationSyntax,
+            static (attributeContext, _) => CreateComponentContext(attributeContext));
+
+        context.RegisterSourceOutput(componentContexts, static (sourceContext, componentContext) => AddComponent(sourceContext, componentContext));
     }
 
-    public void Execute(GeneratorExecutionContext context)
+    private static AdvancedComponentContext CreateComponentContext(GeneratorAttributeSyntaxContext attributeContext)
     {
-        if (context.SyntaxContextReceiver is AdvancedComponentSyntaxReceiver { ComponentClassContexts.Count: > 0 } syntaxReceiver)
-        {
-            foreach (var componentClassContext in syntaxReceiver.ComponentClassContexts)
-            {
-                AddComponent(context, componentClassContext);
-            }
-        }
-    }
+        var componentClass = (ClassDeclarationSyntax)attributeContext.TargetNode;
+        var componentSymbol = (INamedTypeSymbol)attributeContext.TargetSymbol;
+        var componentClassName = componentClass.Identifier.ToString();
+        var componentBaseType = attributeContext.SemanticModel.Compilation.GetTypeByMetadataName(ComponentBaseName)!;
 
-    private static void AddComponent(
-        in GeneratorExecutionContext context,
-        AdvancedComponentContext componentContext)
-    {
-        var componentClass = componentContext.ClassDeclaration;
+        DiagnosticInfo? diagnostic = null;
 
-        if (componentClass.Modifiers.Any(SyntaxKind.PartialKeyword))
+        if (!componentClass.Modifiers.Any(SyntaxKind.PartialKeyword))
         {
-            var componentBaseType =
-                context.Compilation.GetTypeByMetadataName("Microsoft.AspNetCore.Components.ComponentBase")!;
+            diagnostic = DiagnosticInfo.Create(Errors.NotPartialError, componentClass, componentClassName, string.Empty);
+        }
+        else if (!componentSymbol.InheritsFrom(componentBaseType))
+        {
+            diagnostic = DiagnosticInfo.Create(Errors.WrongBaseClassError, componentClass, componentClassName, componentBaseType.GetFullMetadataName());
+        }
+        else if (HasMutableParameters())
+        {
+            diagnostic = DiagnosticInfo.Create(Errors.HasMutableParametersError, componentClass, componentClassName, componentBaseType.GetFullMetadataName());
+        }
 
-            if (!componentContext.ComponentSymbol.InheritsFrom(componentBaseType))
-            {
-                ReportDiagnostics(Errors.WrongBaseClassError, context, componentClass, componentClass.Identifier, componentBaseType.GetFullMetadataName());
-            }
-            else if (HasMutableParameters())
-            {
-                ReportDiagnostics(Errors.HasMutableParametersError, context, componentClass, componentClass.Identifier, componentBaseType.GetFullMetadataName());
-            }
-            else if (componentClass.TypeParameterList is not null &&
-                    componentClass.TypeParameterList.Parameters.Count != 0)
-            {
-                AddGenericComponent(context, componentContext);
-            }
-            else
-            {
-                AddNonGenericComponent(context, componentContext);
-            }
-        }
-        else
-        {
-            ReportDiagnostics(Errors.NotPartialError, context, componentClass, componentClass.Identifier);
-        }
+        var typeParameterName = componentClass.TypeParameterList is { Parameters.Count: > 0 } typeParameterList
+            ? typeParameterList.Parameters[0].Identifier.ValueText
+            : null;
+
+        return new AdvancedComponentContext(
+            componentClassName,
+            componentSymbol.ContainingNamespace.ToString(),
+            typeParameterName,
+            CheckBaseDisposeMethods(),
+            diagnostic);
 
         bool HasMutableParameters()
         {
-            return componentContext.ComponentSymbol.GetMembers()
+            return componentSymbol.GetMembers()
                 .Any(
                     m =>
                     {
@@ -85,34 +81,42 @@ public class AdvancedComponentGenerator : ISourceGenerator
                         return false;
                     });
         }
+
+        DisposeMethods CheckBaseDisposeMethods()
+        {
+            var disposeMethods = componentSymbol.GetMethods("Dispose")
+                .Where(
+                    method => !method.IsStatic &&
+                              method.DeclaredAccessibility != Accessibility.Internal &&
+                              method.DeclaredAccessibility != Accessibility.Private)
+                .ToArray();
+
+            var disposeMethod = Array.Find(disposeMethods, ms => ms.Parameters.Length == 0);
+
+            var disposingMethod = Array.Find(disposeMethods, ms => ms.Parameters.Length == 1 && ms.Parameters[0].Type.SpecialType == SpecialType.System_Boolean);
+
+            var hasDispose = disposeMethod != null;
+            var hasVirtualDispose = hasDispose && disposeMethod!.IsVirtual;
+            var hasDisposing = disposingMethod != null;
+            var hasVirtualDisposing = hasDisposing && disposingMethod!.IsVirtual;
+
+            return new DisposeMethods(hasDispose, hasVirtualDispose, hasDisposing, hasVirtualDisposing);
+        }
     }
 
-    private static void AddNonGenericComponent(in GeneratorExecutionContext context, AdvancedComponentContext componentContext)
+    private static void AddComponent(SourceProductionContext context, AdvancedComponentContext componentContext)
     {
-        var componentSourceText = GenerateComponentSource(componentContext);
+        if (componentContext.Diagnostic is not null)
+        {
+            context.ReportDiagnostic(componentContext.Diagnostic.ToDiagnostic());
+            return;
+        }
 
-        context.AddSource(componentContext.ClassDeclaration.Identifier + ".g.cs", componentSourceText);
-    }
+        var hintName = componentContext.TypeParameterName is null
+            ? componentContext.ClassName + ".g.cs"
+            : componentContext.ClassName + "`1.g.cs";
 
-    private static void AddGenericComponent(in GeneratorExecutionContext context, AdvancedComponentContext componentContext)
-    {
-        var componentClass = componentContext.ClassDeclaration;
-        var typeParameterName = componentClass.TypeParameterList!.Parameters[0].Identifier.ValueText;
-
-        var componentSourceText = GenerateComponentSource(componentContext, typeParameterName);
-
-        context.AddSource(componentClass.Identifier + "`1.g.cs", componentSourceText);
-    }
-
-    private static void ReportDiagnostics(DiagnosticDescriptor descriptor, in GeneratorExecutionContext context, in SyntaxNode componentClass, params object?[]? messageArgs)
-    {
-        context.ReportDiagnostic(
-            Diagnostic.Create(
-                descriptor,
-                Location.Create(
-                    componentClass.SyntaxTree,
-                    TextSpan.FromBounds(componentClass.SpanStart, componentClass.SpanStart)),
-                messageArgs));
+        context.AddSource(hintName, GenerateComponentSource(componentContext));
     }
 
     private static string GetTemplateFileFromEmbeddedResource(string fileName)
@@ -124,24 +128,21 @@ public class AdvancedComponentGenerator : ISourceGenerator
         return sr.ReadToEnd();
     }
 
-    private static SourceText GenerateComponentSource(AdvancedComponentContext componentContext, string? typeParameterName = null)
+    private static SourceText GenerateComponentSource(AdvancedComponentContext componentContext)
     {
-        var componentNamespace = componentContext.ComponentSymbol.ContainingNamespace;
-        var componentClassName = componentContext.ClassDeclaration.Identifier;
-
         var template = GetTemplateFileFromEmbeddedResource("AdvancedComponentBaseTemplate.cs")
             .Replace(": ComponentBase, ", ": ")
-            .Replace("AdvancedComponentBaseTemplate", componentClassName.ToString())
-            .Replace("namespace Bem.ReactiveUI.Blazor.Extras.Components.Templates", $"namespace {componentNamespace}");
+            .Replace("AdvancedComponentBaseTemplate", componentContext.ClassName)
+            .Replace("namespace Bem.ReactiveUI.Blazor.Extras.Components.Templates", $"namespace {componentContext.Namespace}");
 
-        if (typeParameterName == null)
+        if (componentContext.TypeParameterName == null)
         {
             template = template.Replace("<TViewModel>", string.Empty);
             template = Regex.Replace(template, @"\r?\n\s+where TViewModel[^\r\n]+", string.Empty, RegexOptions.Compiled | RegexOptions.Multiline, RegexTimeout);
         }
         else
         {
-            template = template.Replace("TViewModel", typeParameterName);
+            template = template.Replace("TViewModel", componentContext.TypeParameterName);
         }
 
         template = AdjustDisposeMethods(componentContext, template);
@@ -151,7 +152,7 @@ public class AdvancedComponentGenerator : ISourceGenerator
 
     private static string AdjustDisposeMethods(AdvancedComponentContext componentContext, string template)
     {
-        var (hasDispose, hasVirtualDispose, hasDisposing, hasVirtualDisposing) = CheckBaseDisposeMethods();
+        var (hasDispose, hasVirtualDispose, hasDisposing, hasVirtualDisposing) = componentContext.DisposeMethods;
 
         template = (hasDispose, hasVirtualDispose, hasDisposing, hasVirtualDisposing) switch
         {
@@ -171,27 +172,6 @@ public class AdvancedComponentGenerator : ISourceGenerator
         }
 
         return template;
-
-        (bool HasDispose, bool HasVirtualDispose, bool HasDisposing, bool HasVirtualDisposing) CheckBaseDisposeMethods()
-        {
-            var disposeMethods = componentContext.ComponentSymbol.GetMethods("Dispose")
-                .Where(
-                    method => !method.IsStatic &&
-                              method.DeclaredAccessibility != Accessibility.Internal &&
-                              method.DeclaredAccessibility != Accessibility.Private)
-                .ToArray();
-
-            var disposeMethod = Array.Find(disposeMethods, ms => ms.Parameters.Length == 0);
-
-            var disposingMethod = Array.Find(disposeMethods, ms => ms.Parameters.Length == 1 && ms.Parameters[0].Type.SpecialType == SpecialType.System_Boolean);
-
-            var hasDispose = disposeMethod != null;
-            var hasVirtualDispose = hasDispose && disposeMethod!.IsVirtual;
-            var hasDisposing = disposingMethod != null;
-            var hasVirtualDisposing = hasDisposing && disposingMethod!.IsVirtual;
-
-            return (hasDispose, hasVirtualDispose, hasDisposing, hasVirtualDisposing);
-        }
 
         string SetDisposePatternModifiers(string? disposeModifiers, string? disposingModifiers, bool removeBaseDisposeCall, bool removeBaseDisposingCall)
         {
